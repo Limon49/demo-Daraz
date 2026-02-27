@@ -1,17 +1,29 @@
-# demodaraz
+# 📱 DemoDaraz
 
-A new Flutter project.
+A Flutter e-commerce demo app that fetches products from **FakeStore API**.  
+Supports **pinned tabs**, **single vertical scrolling**, and **pull-to-refresh** using a clean **sliver-based architecture**.
+
+---
+
+## Features
+
+- Browse products by categories: All, Electronics, Jewelery  
+- Smooth vertical scrolling with a pinned tab bar  
+- Pull-to-refresh works from any tab  
+- Sliver-based layout with a single scroll owner  
+- Uses **Provider** for state management  
+
+---
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+- Flutter SDK ≥ 3.0  
+- Android/iOS emulator or device
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+### Run the App
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter pub get
+flutter run
