@@ -37,12 +37,14 @@ class ProductProvider extends ChangeNotifier {
   Future<void> loadProducts(String category) async {
     if (_loadingByCategory[category] == true) return;
 
+    print(' category: $category');
     _setLoadingForCategory(category, true);
     _clearErrorForCategory(category);
 
     try {
       final products = await _productRepository.getProducts(category: category == 'all' ? null : category);
       _productsByCategory[category] = products;
+      print('loaded ${products.length} products for category: $category');
     } catch (e) {
       _setErrorForCategory(category, 'An error occurred: ${e.toString()}');
     } finally {

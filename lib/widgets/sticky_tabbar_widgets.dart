@@ -1,8 +1,6 @@
-// lib/widgets/sticky_tab_bar_delegate.dart
 import 'package:flutter/material.dart';
 
-// SliverPersistentHeaderDelegate implementation for the sticky tab bar.
-// minExtent == maxExtent means it never shrinks — it just pins.
+
 class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   final TabBar tabBar;
   const StickyTabBarDelegate(this.tabBar);

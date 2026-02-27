@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../state/app_provider.dart';
 import '../widgets/product_card.dart';
 import '../widgets/sticky_tabbar_widgets.dart';
+import '../widgets/product_screen_components.dart';
 
 const _tabs = [
   ('All', 'all'),
@@ -22,7 +23,6 @@ class _ProductListingScreenState extends State<ProductListingScreen>
     with SingleTickerProviderStateMixin {
 
   late final TabController _tabController;
-  late final PageController _pageController;
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -30,7 +30,10 @@ class _ProductListingScreenState extends State<ProductListingScreen>
     super.initState();
 
     _tabController = TabController(length: _tabs.length, vsync: this);
-    _pageController = PageController();
+
+    _tabController.addListener(() {
+      setState(() {});
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final p = context.read<AppProvider>();
@@ -48,13 +51,14 @@ class _ProductListingScreenState extends State<ProductListingScreen>
   @override
   void dispose() {
     _tabController.dispose();
-    _pageController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    final currentCategory = _tabs[_tabController.index].$2;
 
     return Scaffold(
       body: RefreshIndicator(
@@ -69,11 +73,11 @@ class _ProductListingScreenState extends State<ProductListingScreen>
               pinned: true,
               backgroundColor: const Color(0xFFFF6B35),
               flexibleSpace: FlexibleSpaceBar(
-                background: _buildBanner(),
+                background: ProductScreenComponents.buildBanner(),
               ),
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(48),
-                child: _buildSearchBar(),
+                child: ProductScreenComponents.buildSearchBar(),
               ),
             ),
 
@@ -83,116 +87,52 @@ class _ProductListingScreenState extends State<ProductListingScreen>
                 TabBar(
                   controller: _tabController,
                   tabs: _tabs.map((t) => Tab(text: t.$1)).toList(),
-                  onTap: (index) {
-                    _pageController.animateToPage(
-                      index,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  },
                 ),
               ),
             ),
 
-            SliverFillRemaining(
-              child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: (index) =>
-                    _tabController.animateTo(index),
-                itemCount: _tabs.length,
-                itemBuilder: (context, index) {
-                  return _TabContent(
-                    category: _tabs[index].$2,
+            Consumer<AppProvider>(
+              builder: (context, provider, _) {
+
+                if (provider.isLoadingProductsFor(currentCategory)) {
+                  return const SliverFillRemaining(
+                    child: Center(child: CircularProgressIndicator()),
                   );
-                },
-              ),
+                }
+
+                if (provider.errorFor(currentCategory) != null) {
+                  return SliverFillRemaining(
+                    child: Center(
+                      child: Text(provider.errorFor(currentCategory)!),
+                    ),
+                  );
+                }
+
+                final products =
+                provider.productsFor(currentCategory);
+
+                return SliverPadding(
+                  padding: const EdgeInsets.all(8),
+                  sliver: SliverGrid(
+                    delegate: SliverChildBuilderDelegate(
+                          (context, index) =>
+                          ProductCard(product: products[index]),
+                      childCount: products.length,
+                    ),
+                    gridDelegate:
+                    const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.7,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildBanner() {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFFE2231A), Color(0xFFFF6B35)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: const Center(
-        child: Text(
-          '🛍️ Daraz Sale',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSearchBar() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: 'Search products...',
-          prefixIcon: const Icon(Icons.search),
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: EdgeInsets.zero,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide.none,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _TabContent extends StatelessWidget {
-
-  final String category;
-
-  const _TabContent({required this.category});
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Consumer<AppProvider>(
-      builder: (context, provider, _) {
-
-        if (provider.isLoadingProductsFor(category)) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (provider.errorFor(category) != null) {
-          return Center(child: Text(provider.errorFor(category)!));
-        }
-
-        final products = provider.productsFor(category);
-
-        return GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          padding: const EdgeInsets.all(8),
-          gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.7,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-          ),
-          itemCount: products.length,
-          itemBuilder: (context, index) =>
-              ProductCard(product: products[index]),
-        );
-      },
     );
   }
 }

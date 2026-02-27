@@ -1,4 +1,3 @@
-// lib/widgets/product_card.dart
 import 'package:flutter/material.dart';
 import '../domain/entities/product_entity.dart';
 

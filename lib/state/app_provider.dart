@@ -15,7 +15,6 @@ class AppProvider extends ChangeNotifier {
     _authProvider = authProvider;
     _productProvider = productProvider;
     
-    // Listen to changes from child providers and notify listeners
     _authProvider.addListener(_onChildProviderChanged);
     _productProvider.addListener(_onChildProviderChanged);
   }
@@ -24,7 +23,6 @@ class AppProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Auth delegation
   UserEntity? get user => _authProvider.user;
   bool get isLoading => _authProvider.isLoading;
   String? get errorMessage => _authProvider.errorMessage;
@@ -38,7 +36,6 @@ class AppProvider extends ChangeNotifier {
     _authProvider.logout();
   }
 
-  // Product delegation
   List<ProductEntity> productsFor(String category) {
     return _productProvider.getProductsForCategory(category);
   }
@@ -47,7 +44,6 @@ class AppProvider extends ChangeNotifier {
     return _productProvider.isLoadingProducts(category);
   }
 
-  // Convenience method to match screen usage
   bool isLoadingProductsFor(String category) {
     return isLoadingProducts(category);
   }
@@ -72,7 +68,6 @@ class AppProvider extends ChangeNotifier {
     await _productProvider.refreshProducts(category);
   }
 
-  // Convenience method for refresh
   Future<void> refresh(String category) async {
     await refreshProducts(category);
   }

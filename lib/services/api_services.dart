@@ -1,4 +1,3 @@
-// lib/services/api_service.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/product.dart';
@@ -27,12 +26,14 @@ class ApiService {
         ? '$_base/products/category/$category'
         : '$_base/products';
     final res = await http.get(Uri.parse(url));
+    print('Response (${category ?? 'all'}): ${res.body}');
     final list = jsonDecode(res.body) as List;
     return list.map((e) => Product.fromJson(e)).toList();
   }
 
   static Future<List<String>> fetchCategories() async {
     final res = await http.get(Uri.parse('$_base/products/categories'));
+    print('Response (categories): ${res.body}');
     final list = jsonDecode(res.body) as List;
     return list.map((e) => e.toString()).toList();
   }

@@ -30,8 +30,6 @@ class AuthProvider extends ChangeNotifier {
       await _authRepository.login(username, password);
       
       _isLoggedIn = true;
-      // For demo purposes, we'll create a mock user
-      // In a real app, you'd fetch the user data
       _user = UserEntity(
         id: 1,
         email: '$username@example.com',

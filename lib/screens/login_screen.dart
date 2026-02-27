@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 onPressed: _loading ? null : _login,
-                child: _loading ? const CircularProgressIndicator() : const Text('Login', style: TextStyle(color: Colors.white)),
+                child: _loading ? const CircularProgressIndicator(color: Colors.white,) : const Text('Login', style: TextStyle(color: Colors.white)),
               ),
             ),
             const SizedBox(height: 12),
