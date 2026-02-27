@@ -1,9 +1,9 @@
 // lib/widgets/product_card.dart
 import 'package:flutter/material.dart';
-import '../models/product.dart';
+import '../domain/entities/product_entity.dart';
 
 class ProductCard extends StatelessWidget {
-  final Product product;
+  final ProductEntity product;
   const ProductCard({super.key, required this.product});
 
   @override
@@ -19,7 +19,7 @@ class ProductCard extends StatelessWidget {
               product.image,
               fit: BoxFit.contain,
               width: double.infinity,
-              errorBuilder: (_, __, ___) =>
+              errorBuilder: (context, error, stackTrace) =>
               const Center(child: Icon(Icons.broken_image)),
             ),
           ),

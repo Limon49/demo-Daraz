@@ -73,7 +73,9 @@ class _ProductListingScreenState extends State<ProductListingScreen>
     // Pre-load all tabs
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final p = context.read<AppProvider>();
-      for (final tab in _tabs) p.loadProducts(tab.$2);
+      for (final tab in _tabs) {
+      p.loadProducts(tab.$2);
+    }
     });
   }
 
@@ -239,7 +241,7 @@ class _TabContentState extends State<_TabContent>
 
     return Consumer<AppProvider>(
       builder: (context, provider, _) {
-        if (provider.isLoading(widget.category)) {
+        if (provider.isLoadingProductsFor(widget.category)) {
           return const Center(child: CircularProgressIndicator());
         }
         if (provider.errorFor(widget.category) != null) {

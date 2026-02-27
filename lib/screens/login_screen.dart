@@ -1,4 +1,3 @@
-// lib/screens/login_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/app_provider.dart';
@@ -54,8 +53,22 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFF96D00),
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor: const Color(0xFFF96D00).withOpacity(0.45),
+                  disabledForegroundColor: Colors.white60,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.4,
+                  ),
+                ),
                 onPressed: _loading ? null : _login,
-                child: _loading ? const CircularProgressIndicator() : const Text('Login'),
+                child: _loading ? const CircularProgressIndicator() : const Text('Login', style: TextStyle(color: Colors.white)),
               ),
             ),
             const SizedBox(height: 12),

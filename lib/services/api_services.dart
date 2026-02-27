@@ -2,11 +2,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/product.dart';
+import '../data/models/user_model.dart' as user;
 
 class ApiService {
   static const _base = 'https://fakestoreapi.com';
 
-  // Returns JWT token or throws
   static Future<String> login(String username, String password) async {
     final res = await http.post(
       Uri.parse('$_base/auth/login'),
@@ -17,9 +17,9 @@ class ApiService {
     return jsonDecode(res.body)['token'];
   }
 
-  static Future<UserModel> fetchUser(int userId) async {
+  static Future<user.UserModel> fetchUser(int userId) async {
     final res = await http.get(Uri.parse('$_base/users/$userId'));
-    return UserModel.fromJson(jsonDecode(res.body));
+    return user.UserModel.fromJson(jsonDecode(res.body));
   }
 
   static Future<List<Product>> fetchProducts({String? category}) async {

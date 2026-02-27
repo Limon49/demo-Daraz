@@ -1,4 +1,6 @@
-class Product {
+import '../../domain/entities/product_entity.dart';
+
+class ProductModel {
   final int id;
   final String title;
   final String image;
@@ -7,7 +9,7 @@ class Product {
   final double rating;
   final int ratingCount;
 
-  const Product({
+  const ProductModel({
     required this.id,
     required this.title,
     required this.image,
@@ -17,8 +19,8 @@ class Product {
     required this.ratingCount,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
+    return ProductModel(
       id: json['id'] as int,
       title: json['title'] as String,
       image: json['image'] as String,
@@ -43,8 +45,27 @@ class Product {
     };
   }
 
-  @override
-  String toString() {
-    return 'Product(id: $id, title: $title, category: $category, price: $price)';
+  ProductEntity toEntity() {
+    return ProductEntity(
+      id: id,
+      title: title,
+      image: image,
+      category: category,
+      price: price,
+      rating: rating,
+      ratingCount: ratingCount,
+    );
+  }
+
+  factory ProductModel.fromEntity(ProductEntity entity) {
+    return ProductModel(
+      id: entity.id,
+      title: entity.title,
+      image: entity.image,
+      category: entity.category,
+      price: entity.price,
+      rating: entity.rating,
+      ratingCount: entity.ratingCount,
+    );
   }
 }
