@@ -15,12 +15,8 @@ Supports **pinned tabs**, **single vertical scrolling**, and **pull-to-refresh**
 
 ---
 
-## Getting Started
-
-### Prerequisites
-
-- Flutter SDK ≥ 3.0  
-- Android/iOS emulator or device
+### Important Info
+- Some functionality can be dupticated please ignore this. 
 
 ### Run the App
 
